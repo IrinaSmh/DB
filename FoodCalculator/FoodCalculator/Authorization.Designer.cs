@@ -96,6 +96,7 @@ namespace FoodCalculator
             this.enter_button.TabIndex = 5;
             this.enter_button.Text = "Войти";
             this.enter_button.UseVisualStyleBackColor = true;
+            this.enter_button.Click += new System.EventHandler(this.enter_button_Click);
             this.enter_button.MouseEnter += new System.EventHandler(this.enter_button_MouseEnter);
             // 
             // Authorization

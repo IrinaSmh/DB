@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,6 +26,28 @@ namespace FoodCalculator
             enter_button.BackColor = Color.FromArgb(46384);
         }
 
+        private void enter_button_Click(object sender, EventArgs e)
+        {
+            String loginUser = login_textBox.Text;
+            String passwordUser = password_textBox.Text;
 
+            Database db = new Database();
+
+            DataTable table = new DataTable();
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+
+            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `name` = @lU AND `password` = @pU", db.getConnection());
+            command.Parameters.AddWithValue("pU", passwordUser);
+            command.Parameters.AddWithValue("lU", loginUser);
+
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+
+            if(table.Rows.Count > 0)
+            {
+                MessageBox.Show("YES");
+            } else MessageBox.Show("NO");
+        }
     }
 }
