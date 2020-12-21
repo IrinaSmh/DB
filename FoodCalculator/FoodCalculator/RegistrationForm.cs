@@ -188,5 +188,9 @@ namespace FoodCalculator
             man_radioButton.Checked = false;
         }
 
+        private void RegistrationForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Program.auth.Show();
+        }
     }
 }

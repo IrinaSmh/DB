@@ -8,6 +8,7 @@ namespace FoodCalculator
 {
     static class Program
     {
+        public static Authorization auth;
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
@@ -16,7 +17,7 @@ namespace FoodCalculator
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new RegistrationForm());
+            Application.Run(auth = new Authorization());
         }
     }
 }

@@ -46,8 +46,27 @@ namespace FoodCalculator
 
             if(table.Rows.Count > 0)
             {
-                MessageBox.Show("YES");
-            } else MessageBox.Show("NO");
+                this.Hide();
+                Main mainForm = new Main();
+                mainForm.Show();
+            } else MessageBox.Show("Такого пользователя нет");
+        }
+
+        private void reg_label_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            RegistrationForm registrationForm = new RegistrationForm();
+            registrationForm.Show();
+        }
+
+        private void reg_label_MouseHover(object sender, EventArgs e)
+        {
+            reg_label.ForeColor = Color.White;
+        }
+
+        private void reg_label_MouseLeave(object sender, EventArgs e)
+        {
+            reg_label.ForeColor = Color.Black;
         }
     }
 }

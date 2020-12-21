@@ -31,10 +31,11 @@ namespace FoodCalculator
         {
             this.label1 = new System.Windows.Forms.Label();
             this.login_textBox = new System.Windows.Forms.TextBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.password_textBox = new System.Windows.Forms.TextBox();
             this.enter_button = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.reg_label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -56,26 +57,6 @@ namespace FoodCalculator
             this.login_textBox.Name = "login_textBox";
             this.login_textBox.Size = new System.Drawing.Size(339, 44);
             this.login_textBox.TabIndex = 2;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::FoodCalculator.Properties.Resources.iconfinder_key_3090581;
-            this.pictureBox2.Location = new System.Drawing.Point(48, 181);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(64, 64);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 3;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::FoodCalculator.Properties.Resources.iconfinder_Rounded_31_2024644;
-            this.pictureBox1.Location = new System.Drawing.Point(48, 99);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(64, 64);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
             // 
             // password_textBox
             // 
@@ -99,12 +80,46 @@ namespace FoodCalculator
             this.enter_button.Click += new System.EventHandler(this.enter_button_Click);
             this.enter_button.MouseEnter += new System.EventHandler(this.enter_button_MouseEnter);
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::FoodCalculator.Properties.Resources.iconfinder_key_3090581;
+            this.pictureBox2.Location = new System.Drawing.Point(48, 181);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(64, 64);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 3;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::FoodCalculator.Properties.Resources.iconfinder_Rounded_31_2024644;
+            this.pictureBox1.Location = new System.Drawing.Point(48, 99);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(64, 64);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 1;
+            this.pictureBox1.TabStop = false;
+            // 
+            // reg_label
+            // 
+            this.reg_label.AutoSize = true;
+            this.reg_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.reg_label.Location = new System.Drawing.Point(369, 363);
+            this.reg_label.Name = "reg_label";
+            this.reg_label.Size = new System.Drawing.Size(187, 20);
+            this.reg_label.TabIndex = 6;
+            this.reg_label.Text = "Зарегистрироваться";
+            this.reg_label.Click += new System.EventHandler(this.reg_label_Click);
+            this.reg_label.MouseLeave += new System.EventHandler(this.reg_label_MouseLeave);
+            this.reg_label.MouseHover += new System.EventHandler(this.reg_label_MouseHover);
+            // 
             // Authorization
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(235)))), ((int)(((byte)(94)))));
             this.ClientSize = new System.Drawing.Size(582, 401);
+            this.Controls.Add(this.reg_label);
             this.Controls.Add(this.enter_button);
             this.Controls.Add(this.password_textBox);
             this.Controls.Add(this.pictureBox2);
@@ -128,5 +143,6 @@ namespace FoodCalculator
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.TextBox password_textBox;
         private System.Windows.Forms.Button enter_button;
+        private System.Windows.Forms.Label reg_label;
     }
 }
