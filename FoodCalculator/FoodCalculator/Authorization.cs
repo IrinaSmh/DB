@@ -13,6 +13,7 @@ namespace FoodCalculator
 {
     public partial class Authorization : Form
     {
+        public static string id;
         public Authorization()
         {
             InitializeComponent();
@@ -46,6 +47,7 @@ namespace FoodCalculator
 
             if(table.Rows.Count > 0)
             {
+                id = table.Rows[0].ItemArray[0].ToString();
                 this.Hide();
                 Main mainForm = new Main();
                 mainForm.Show();
