@@ -31,41 +31,22 @@ namespace FoodCalculator
 
         private void login_textBox_Enter(object sender, EventArgs e)
         {
-            if(login_textBox.Text == "Введите имя")
-            {
-                login_textBox.Text = "";
-                login_textBox.ForeColor = Color.Black;
-            }
-               
+            Drawing.textBoxEnter("Введите имя", login_textBox);
         }
 
         private void login_textBox_Leave(object sender, EventArgs e)
         {
-            if (login_textBox.Text == "")
-            {
-                login_textBox.Text = "Введите имя";
-                login_textBox.ForeColor = Color.Gray;
-            }
-                
+            Drawing.textBoxLeave("Введите имя", login_textBox);
         }
 
         private void password_textBox_Enter_1(object sender, EventArgs e)
         {
-            if (password_textBox.Text == "Введите пароль")
-            {
-                password_textBox.Text = "";
-                password_textBox.ForeColor = Color.Black;
-            }
-
+            Drawing.textBoxEnter("Введите пароль", password_textBox);
         }
 
         private void password_textBox_Leave_1(object sender, EventArgs e)
         {
-            if (password_textBox.Text == "")
-            {
-                password_textBox.Text = "Введите пароль";
-                password_textBox.ForeColor = Color.Gray;
-            }
+            Drawing.textBoxLeave("Введите пароль", password_textBox);
         }
 
         private void registration_button_MouseEnter_1(object sender, EventArgs e)
@@ -79,44 +60,27 @@ namespace FoodCalculator
             password_textBox.Text == "Введите пароль" ||
             weight.Text == "Вес" ||
             height.Text == "Рост" ||
-            age.Text == "Возраст") MessageBox.Show("Заполните все поля");
+            age.Text == "Возраст" || (man_radioButton.Checked == false || woman.Checked == false)) MessageBox.Show("Заполните все поля");
             else
             {
                 if (isLoginExists()) return;
-              
+                int gender = -1;
                     Database db = new Database();
-                    MySqlCommand command = new MySqlCommand("INSERT INTO `users` (`name`, `password`, `gender`, `weight`, `height`) VALUES (@name, @password, @age, @weigth, @height)", db.getConnection());
-                    command.Parameters.AddWithValue("@name", login_textBox.Text);
-                    command.Parameters.AddWithValue("@password", password_textBox.Text);
-                    if (man_radioButton.Checked == true) command.Parameters.AddWithValue("@gender", 1);
-                    if (woman.Checked == true) command.Parameters.AddWithValue("@gender", 0);
-                    command.Parameters.AddWithValue("@weigth", float.Parse(weight.Text));
-                    command.Parameters.AddWithValue("@height", float.Parse(height.Text));
-                    command.Parameters.AddWithValue("@age", int.Parse(age.Text));
-                    db.openConnection();
-                    if (command.ExecuteNonQuery() == 1) MessageBox.Show("Аккаунт создан");
-                    else MessageBox.Show("Аккаунт не создан");
-                    db.closeConnection();
-                }
-            
+                   
+                if (man_radioButton.Checked == true) gender = 1;
+                if (woman.Checked == true) gender = 0;
+
+                    if (db.registration(login_textBox.Text, password_textBox.Text, gender, float.Parse(weight.Text),
+                        float.Parse(height.Text), int.Parse(age.Text))) MessageBox.Show("Аккаунт создан");
+                    else MessageBox.Show("Аккаунт не создан");                 
+                }          
         }
 
         private bool isLoginExists()
         {
             Database db = new Database();
 
-            DataTable table = new DataTable();
-
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
-
-            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `name` = @lU", db.getConnection());
-            command.Parameters.AddWithValue("pU", password_textBox.Text);
-            command.Parameters.AddWithValue("lU", login_textBox.Text);
-
-            adapter.SelectCommand = command;
-            adapter.Fill(table);
-
-            if (table.Rows.Count > 0)
+            if (db.checkLoginExist(login_textBox.Text, password_textBox.Text))
             {
                 MessageBox.Show("Такой логин уже существует");
                 return true;
@@ -126,56 +90,32 @@ namespace FoodCalculator
 
         private void height_Enter(object sender, EventArgs e)
         {
-            if (height.Text == "Рост")
-            {
-                height.Text = "";
-                height.ForeColor = Color.Black;
-            }
+            Drawing.textBoxEnter("Рост", height);
         }
 
         private void age_Enter(object sender, EventArgs e)
         {
-            if (age.Text == "Возраст")
-            {
-                age.Text = "";
-                age.ForeColor = Color.Black;
-            }
+            Drawing.textBoxEnter("Возраст", age);
         }
 
         private void weight_Enter(object sender, EventArgs e)
         {
-            if (weight.Text == "Вес")
-            {
-                weight.Text = "";
-                weight.ForeColor = Color.Black;
-            }
+            Drawing.textBoxEnter("Вес", weight);
         }
 
         private void height_Leave(object sender, EventArgs e)
         {
-            if (height.Text == "")
-            {
-                height.Text = "Рост";
-                height.ForeColor = Color.Gray;
-            }
+            Drawing.textBoxLeave("Рост", height);
         }
 
         private void weight_Leave(object sender, EventArgs e)
         {
-            if (weight.Text == "")
-            {
-                weight.Text = "Вес";
-                weight.ForeColor = Color.Gray;
-            }
+            Drawing.textBoxLeave("Вес", weight);
         }
 
         private void age_Leave(object sender, EventArgs e)
         {
-            if (age.Text == "")
-            {
-                age.Text = "Возраст";
-                age.ForeColor = Color.Gray;
-            }
+            Drawing.textBoxLeave("Возраст", age);
         }
 
         private void man_radioButton_Click(object sender, EventArgs e)

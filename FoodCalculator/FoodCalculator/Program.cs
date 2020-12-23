@@ -17,7 +17,8 @@ namespace FoodCalculator
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Authorization());
+            auth = new Authorization();
+            Application.Run(auth);
         }
     }
 }
