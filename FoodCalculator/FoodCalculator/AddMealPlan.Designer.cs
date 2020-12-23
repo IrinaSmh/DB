@@ -29,102 +29,55 @@ namespace FoodCalculator
         /// </summary>
         private void InitializeComponent()
         {
-            this.water = new System.Windows.Forms.TextBox();
-            this.b = new System.Windows.Forms.TextBox();
+            this.protein = new System.Windows.Forms.TextBox();
             this.fat = new System.Windows.Forms.TextBox();
-            this.y = new System.Windows.Forms.TextBox();
-            this.cc = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.carb = new System.Windows.Forms.TextBox();
+            this.calories = new System.Windows.Forms.TextBox();
             this.save = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // water
+            // protein
             // 
-            this.water.Location = new System.Drawing.Point(36, 110);
-            this.water.Name = "water";
-            this.water.Size = new System.Drawing.Size(100, 22);
-            this.water.TabIndex = 0;
-            // 
-            // b
-            // 
-            this.b.Location = new System.Drawing.Point(142, 110);
-            this.b.Name = "b";
-            this.b.Size = new System.Drawing.Size(100, 22);
-            this.b.TabIndex = 1;
+            this.protein.Location = new System.Drawing.Point(51, 110);
+            this.protein.Name = "protein";
+            this.protein.Size = new System.Drawing.Size(100, 22);
+            this.protein.TabIndex = 1;
+            this.protein.Enter += new System.EventHandler(this.protein_Enter);
+            this.protein.Leave += new System.EventHandler(this.protein_Leave);
             // 
             // fat
             // 
-            this.fat.Location = new System.Drawing.Point(248, 110);
+            this.fat.Location = new System.Drawing.Point(167, 110);
             this.fat.Name = "fat";
             this.fat.Size = new System.Drawing.Size(100, 22);
             this.fat.TabIndex = 2;
+            this.fat.Enter += new System.EventHandler(this.fat_Enter);
+            this.fat.Leave += new System.EventHandler(this.fat_Leave);
             // 
-            // y
+            // carb
             // 
-            this.y.Location = new System.Drawing.Point(354, 110);
-            this.y.Name = "y";
-            this.y.Size = new System.Drawing.Size(100, 22);
-            this.y.TabIndex = 3;
+            this.carb.Location = new System.Drawing.Point(282, 110);
+            this.carb.Name = "carb";
+            this.carb.Size = new System.Drawing.Size(100, 22);
+            this.carb.TabIndex = 3;
+            this.carb.Enter += new System.EventHandler(this.carb_Enter);
+            this.carb.Leave += new System.EventHandler(this.carb_Leave);
             // 
-            // cc
+            // calories
             // 
-            this.cc.Location = new System.Drawing.Point(461, 110);
-            this.cc.Name = "cc";
-            this.cc.Size = new System.Drawing.Size(100, 22);
-            this.cc.TabIndex = 4;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(36, 75);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 17);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Вода";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(142, 75);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(48, 17);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Белки";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(248, 75);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(47, 17);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Жиры";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(354, 75);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(71, 17);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Углеводы";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(461, 75);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(65, 17);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Калории";
+            this.calories.Location = new System.Drawing.Point(399, 110);
+            this.calories.Name = "calories";
+            this.calories.Size = new System.Drawing.Size(100, 22);
+            this.calories.TabIndex = 4;
+            this.calories.Enter += new System.EventHandler(this.calories_Enter);
+            this.calories.Leave += new System.EventHandler(this.calories_Leave);
             // 
             // save
             // 
-            this.save.Location = new System.Drawing.Point(464, 164);
+            this.save.Cursor = System.Windows.Forms.Cursors.Default;
+            this.save.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.save.Location = new System.Drawing.Point(436, 170);
             this.save.Name = "save";
             this.save.Size = new System.Drawing.Size(125, 32);
             this.save.TabIndex = 10;
@@ -132,22 +85,27 @@ namespace FoodCalculator
             this.save.UseVisualStyleBackColor = true;
             this.save.Click += new System.EventHandler(this.save_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(31, 46);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(306, 25);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Введите данные плана питания";
+            // 
             // AddMealPlan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 208);
+            this.ClientSize = new System.Drawing.Size(595, 229);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.save);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.cc);
-            this.Controls.Add(this.y);
+            this.Controls.Add(this.calories);
+            this.Controls.Add(this.carb);
             this.Controls.Add(this.fat);
-            this.Controls.Add(this.b);
-            this.Controls.Add(this.water);
+            this.Controls.Add(this.protein);
             this.Name = "AddMealPlan";
             this.Text = "AddMealPlan";
             this.ResumeLayout(false);
@@ -156,17 +114,11 @@ namespace FoodCalculator
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox water;
-        private System.Windows.Forms.TextBox b;
+        private System.Windows.Forms.TextBox protein;
         private System.Windows.Forms.TextBox fat;
-        private System.Windows.Forms.TextBox y;
-        private System.Windows.Forms.TextBox cc;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox carb;
+        private System.Windows.Forms.TextBox calories;
         private System.Windows.Forms.Button save;
+        private System.Windows.Forms.Label label6;
     }
 }

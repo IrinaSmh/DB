@@ -14,6 +14,7 @@ namespace FoodCalculator
     public partial class Authorization : Form
     {
         public static string id;
+        public static string name;
         public Authorization()
         {
             InitializeComponent();
@@ -34,20 +35,12 @@ namespace FoodCalculator
 
             Database db = new Database();
 
-            DataTable table = new DataTable();
-
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
-
-            MySqlCommand command = new MySqlCommand("SELECT * FROM `users` WHERE `name` = @lU AND `password` = @pU", db.getConnection());
-            command.Parameters.AddWithValue("pU", passwordUser);
-            command.Parameters.AddWithValue("lU", loginUser);
-
-            adapter.SelectCommand = command;
-            adapter.Fill(table);
+            DataTable table = db.getUser(loginUser, passwordUser);
 
             if(table.Rows.Count > 0)
             {
                 id = table.Rows[0].ItemArray[0].ToString();
+                name = table.Rows[0].ItemArray[1].ToString();
                 this.Hide();
                 Main mainForm = new Main();
                 mainForm.Show();

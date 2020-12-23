@@ -56,7 +56,7 @@ namespace FoodCalculator
             // 
             this.name_label.AutoSize = true;
             this.name_label.Font = new System.Drawing.Font("Microsoft Uighur", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.name_label.Location = new System.Drawing.Point(12, 9);
+            this.name_label.Location = new System.Drawing.Point(18, 20);
             this.name_label.Name = "name_label";
             this.name_label.Size = new System.Drawing.Size(56, 32);
             this.name_label.TabIndex = 0;
@@ -67,7 +67,7 @@ namespace FoodCalculator
             this.meal_label.AutoSize = true;
             this.meal_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.meal_label.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.meal_label.Location = new System.Drawing.Point(12, 55);
+            this.meal_label.Location = new System.Drawing.Point(19, 72);
             this.meal_label.Name = "meal_label";
             this.meal_label.Size = new System.Drawing.Size(230, 25);
             this.meal_label.TabIndex = 1;
@@ -95,7 +95,8 @@ namespace FoodCalculator
             // 
             // addWater_button
             // 
-            this.addWater_button.Location = new System.Drawing.Point(681, 131);
+            this.addWater_button.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.addWater_button.Location = new System.Drawing.Point(917, 105);
             this.addWater_button.Name = "addWater_button";
             this.addWater_button.Size = new System.Drawing.Size(92, 23);
             this.addWater_button.TabIndex = 5;
@@ -115,9 +116,11 @@ namespace FoodCalculator
             // 
             // addMealPlan_button
             // 
-            this.addMealPlan_button.Location = new System.Drawing.Point(637, 391);
+            this.addMealPlan_button.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.addMealPlan_button.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.addMealPlan_button.Location = new System.Drawing.Point(3, 3);
             this.addMealPlan_button.Name = "addMealPlan_button";
-            this.addMealPlan_button.Size = new System.Drawing.Size(94, 23);
+            this.addMealPlan_button.Size = new System.Drawing.Size(143, 36);
             this.addMealPlan_button.TabIndex = 7;
             this.addMealPlan_button.Text = "Новый";
             this.addMealPlan_button.UseVisualStyleBackColor = true;
@@ -126,15 +129,16 @@ namespace FoodCalculator
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.33333F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.66667F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 67F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 53F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.9372F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.0628F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 95F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 87F));
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.result_label_inTable, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.label3, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label4, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.addMealPlan_button, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label5, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.label6, 4, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(468, 432);
@@ -143,7 +147,7 @@ namespace FoodCalculator
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(399, 124);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(534, 124);
             this.tableLayoutPanel1.TabIndex = 9;
             // 
             // label2
@@ -154,7 +158,7 @@ namespace FoodCalculator
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.Location = new System.Drawing.Point(3, 42);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(127, 42);
+            this.label2.Size = new System.Drawing.Size(143, 42);
             this.label2.TabIndex = 10;
             this.label2.Text = "План";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -167,7 +171,7 @@ namespace FoodCalculator
             this.result_label_inTable.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.result_label_inTable.Location = new System.Drawing.Point(3, 84);
             this.result_label_inTable.Name = "result_label_inTable";
-            this.result_label_inTable.Size = new System.Drawing.Size(127, 40);
+            this.result_label_inTable.Size = new System.Drawing.Size(143, 40);
             this.result_label_inTable.TabIndex = 11;
             this.result_label_inTable.Text = "Результат";
             this.result_label_inTable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -178,9 +182,9 @@ namespace FoodCalculator
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(136, 0);
+            this.label3.Location = new System.Drawing.Point(152, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 42);
+            this.label3.Size = new System.Drawing.Size(97, 42);
             this.label3.TabIndex = 12;
             this.label3.Text = "ккал";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -191,9 +195,9 @@ namespace FoodCalculator
             this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(213, 0);
+            this.label4.Location = new System.Drawing.Point(255, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(62, 42);
+            this.label4.Size = new System.Drawing.Size(93, 42);
             this.label4.TabIndex = 13;
             this.label4.Text = "белки";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -203,10 +207,10 @@ namespace FoodCalculator
             this.label5.AutoSize = true;
             this.label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(281, 0);
+            this.label5.Location = new System.Drawing.Point(354, 0);
             this.label5.Name = "label5";
             this.label5.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label5.Size = new System.Drawing.Size(61, 42);
+            this.label5.Size = new System.Drawing.Size(89, 42);
             this.label5.TabIndex = 14;
             this.label5.Text = "жиры";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -216,21 +220,23 @@ namespace FoodCalculator
             this.label6.AutoSize = true;
             this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(348, 0);
+            this.label6.Location = new System.Drawing.Point(449, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(48, 42);
+            this.label6.Size = new System.Drawing.Size(82, 42);
             this.label6.TabIndex = 15;
             this.label6.Text = "угл";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // addMeal_button
             // 
-            this.addMeal_button.Location = new System.Drawing.Point(248, 59);
+            this.addMeal_button.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.addMeal_button.Location = new System.Drawing.Point(35, 582);
             this.addMeal_button.Name = "addMeal_button";
             this.addMeal_button.Size = new System.Drawing.Size(91, 23);
             this.addMeal_button.TabIndex = 20;
             this.addMeal_button.Text = "Добавить";
             this.addMeal_button.UseVisualStyleBackColor = true;
+            this.addMeal_button.Click += new System.EventHandler(this.addMeal_button_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -239,11 +245,11 @@ namespace FoodCalculator
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.2809F));
             this.tableLayoutPanel2.Controls.Add(this.label8, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.label9, 1, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(17, 103);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(17, 131);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(445, 453);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(445, 425);
             this.tableLayoutPanel2.TabIndex = 21;
             // 
             // label8
@@ -253,7 +259,7 @@ namespace FoodCalculator
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label8.Location = new System.Drawing.Point(3, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(192, 453);
+            this.label8.Size = new System.Drawing.Size(192, 425);
             this.label8.TabIndex = 0;
             this.label8.Text = "время";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -265,14 +271,15 @@ namespace FoodCalculator
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label9.Location = new System.Drawing.Point(201, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(241, 453);
+            this.label9.Size = new System.Drawing.Size(241, 425);
             this.label9.TabIndex = 1;
             this.label9.Text = "название еды";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Update
             // 
-            this.Update.Location = new System.Drawing.Point(954, 566);
+            this.Update.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Update.Location = new System.Drawing.Point(954, 577);
             this.Update.Name = "Update";
             this.Update.Size = new System.Drawing.Size(117, 32);
             this.Update.TabIndex = 22;
@@ -284,12 +291,11 @@ namespace FoodCalculator
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(131)))), ((int)(((byte)(235)))), ((int)(((byte)(94)))));
-            this.ClientSize = new System.Drawing.Size(1104, 620);
+            this.ClientSize = new System.Drawing.Size(1122, 621);
             this.Controls.Add(this.Update);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.addMeal_button);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.addMealPlan_button);
             this.Controls.Add(this.mealPlan_label);
             this.Controls.Add(this.addWater_button);
             this.Controls.Add(this.water_res);
