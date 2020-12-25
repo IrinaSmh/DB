@@ -16,7 +16,11 @@ namespace FoodCalculator
         private void save_Click(object sender, EventArgs e)
         {
             if(protein.Text == "белки" || fat.Text == "жиры" || carb.Text == "углеводы" || calories.Text == "калории")
+            {
                 MessageBox.Show("Пожалуйста, заполните все поля");
+                return;
+            }
+               
             Database db = new Database();
             if (db.saveMealPlan(Authorization.id, int.Parse(protein.Text),
                 int.Parse(fat.Text), int.Parse(carb.Text), int.Parse(calories.Text)) == false)
