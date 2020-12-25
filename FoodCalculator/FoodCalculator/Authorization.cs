@@ -1,19 +1,13 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FoodCalculator
 {
     public partial class Authorization : Form
     {
-        public static string id;
+        public static int id;
         public static string name;
         public Authorization()
         {
@@ -39,7 +33,7 @@ namespace FoodCalculator
 
             if(table.Rows.Count > 0)
             {
-                id = table.Rows[0].ItemArray[0].ToString();
+                id = int.Parse(table.Rows[0].ItemArray[0].ToString());
                 name = table.Rows[0].ItemArray[1].ToString();
                 this.Hide();
                 Main mainForm = new Main();

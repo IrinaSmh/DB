@@ -1,10 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FoodCalculator
 {
@@ -86,7 +82,7 @@ namespace FoodCalculator
        + "DATE(meal.createAt) = @d) res ON res.id = meal_has_dishes.meal_id) res "
        + "ON dishes.id = res.dishes_id) "
    + "UNION "
-     + "(SELECT products.name, res.createAt FROM products JOIN "
+     + "(SELECT res.createAt, products.name FROM products JOIN "
    + "(SELECT meal_has_products.products_id, res.createAt FROM meal_has_products JOIN "
 + "(SELECT meal.createAt, meal.id FROM meal WHERE meal.user_id = @id  AND "
       + "DATE(meal.createAt) = @d) res ON meal_has_products.meal_id = res.id) res "
@@ -109,7 +105,7 @@ namespace FoodCalculator
             MySqlDataAdapter adapter = new MySqlDataAdapter();
 
             MySqlCommand command = new MySqlCommand("SELECT `gender`, `weight` FROM `users` WHERE `id` = @id", this.getConnection());
-            //Authorization.id.ToString() вместо 1
+
             command.Parameters.AddWithValue("@id", id);
 
             adapter.SelectCommand = command;
@@ -118,7 +114,7 @@ namespace FoodCalculator
             return table;
         }
 
-        public DataTable getWaterRes(int id)
+        public DataTable getWaterRes(int id, string date)
         {
             DataTable table = new DataTable();
 
@@ -126,9 +122,10 @@ namespace FoodCalculator
 
             MySqlCommand command = new MySqlCommand("SELECT SUM(typesofwaterportion.value) FROM drinkingwater "
  + "JOIN typesofwaterportion ON typesofwaterportion.id = drinkingwater.typesOfWaterPortion_id "
-   + "WHERE DATE(drinkingwater.createAt) = '2020-11-20' AND drinkingwater.users_id = @id;", this.getConnection());
+   + "WHERE DATE(drinkingwater.createAt) = @d AND drinkingwater.users_id = @id;", this.getConnection());
             
             command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@d", date);
 
             adapter.SelectCommand = command;
             adapter.Fill(table);
@@ -147,7 +144,7 @@ namespace FoodCalculator
  + "JOIN valuesofcharactericstic ON mealplans_has_valuesofcharactericstic.valuesOfCharactericstic_id = valuesofcharactericstic.id "
  + "JOIN characteristics ON characteristics.id = valuesofcharactericstic.characteristics_id "
  + "WHERE mealplans.users_id = @id AND createAt = (select MAX(createAt) from mealplans);", this.getConnection());
-            //Authorization.id.ToString() вместо 1
+
             command.Parameters.AddWithValue("@id", id);
 
             adapter.SelectCommand = command;
@@ -263,6 +260,349 @@ namespace FoodCalculator
             adapter.Fill(table);
 
             return table;
+        }
+
+        public bool saveProductInMeal(int userId, string nameProduct, string quantity, string type)
+        {
+            int typeId = -1;
+            if (type == "шт") typeId = 1;
+            if (type == "г") typeId = 2;
+            if (type == "ч.л.") typeId = 4;
+            if (type == "ст.л.") typeId = 5;
+            if (type == "стакан") typeId = 6;
+
+            bool res_query;
+            MySqlCommand command1 = new MySqlCommand("INSERT INTO meal(createAt, user_id) " +
+                "VALUES (NOW(), @id);" + " select last_insert_id();", this.getConnection());
+            command1.Parameters.AddWithValue("id", userId);
+
+            this.openConnection();
+
+            int mealId = Convert.ToInt32(command1.ExecuteScalar());
+
+            MySqlCommand command2 = new MySqlCommand("SELECT * FROM products WHERE name = @n;", this.getConnection());
+            command2.Parameters.AddWithValue("n", nameProduct);
+            int productId = (int)command2.ExecuteScalar();
+
+            MySqlCommand command3 = new MySqlCommand("INSERT INTO meal_has_products(meal_id, products_id, quantity, measurementtype_id) " +
+    "VALUES (@mI, @dI, @q, @mTI);", this.getConnection());
+            command3.Parameters.AddWithValue("mI", mealId);
+            command3.Parameters.AddWithValue("dI", productId);
+            command3.Parameters.AddWithValue("q", quantity);
+            command3.Parameters.AddWithValue("mTI", typeId);
+
+            if (command3.ExecuteNonQuery() == 1) res_query = true;
+            else res_query = false;
+
+            this.closeConnection();
+            return res_query;
+        }
+
+
+        public bool saveDishInMeal(int userId, string nameDish)
+        {
+            bool res_query;
+            MySqlCommand command1 = new MySqlCommand("INSERT INTO meal(createAt, user_id) " +
+                "VALUES (NOW(), @id);" + " select last_insert_id();", this.getConnection());
+            command1.Parameters.AddWithValue("id", userId);
+
+            this.openConnection();
+
+            int mealId = Convert.ToInt32(command1.ExecuteScalar());
+            
+            Console.WriteLine(mealId.ToString());
+
+            MySqlCommand command2 = new MySqlCommand("SELECT * FROM dishes WHERE name = @n;", this.getConnection());
+            command2.Parameters.AddWithValue("n", nameDish);
+            int dishId = (int)command2.ExecuteScalar();
+            Console.WriteLine(dishId.ToString());
+
+            MySqlCommand command3 = new MySqlCommand("INSERT INTO meal_has_dishes(meal_id, dishes_id) " +
+    "VALUES (@mI, @dI);", this.getConnection());
+            command3.Parameters.AddWithValue("mI", mealId);
+            command3.Parameters.AddWithValue("dI", dishId);
+
+            if (command3.ExecuteNonQuery() == 1) res_query = true;
+            else res_query = false;
+
+            this.closeConnection();
+            return res_query;
+        }
+
+        public int getCharsUserMeal(int userId, string charType, string date)
+        {
+            int charId = -1;
+            if (charType == "белки") charId = 1;
+            if (charType == "жиры") charId = 2;
+            if (charType == "углеводы") charId = 3;
+            if (charType == "калории") charId = 4;
+
+            DataTable table = new DataTable();
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+
+            MySqlCommand command = new MySqlCommand("SELECT SUM(proteins) FROM "
+    +"(SELECT valuesofcharactericstic.value, dishes_has_products.measurementtype_id, dishes_has_products.quantity, "
+        +"CASE "
+        +"WHEN dishes_has_products.measurementtype_id = 2 "
+        +"THEN(dishes_has_products.quantity / 100) * (valuesofcharactericstic.value) "
+        +"ELSE(dishes_has_products.quantity) * (valuesofcharactericstic.value) "
+    +"END AS proteins "
+ +"FROM valuesofcharactericstic "
+    +"JOIN products_has_valuesofcharactericstic ON valuesofcharactericstic.id = products_has_valuesofcharactericstic.valuesOfCharactericstic_id "
+    +"JOIN dishes_has_products ON dishes_has_products.products_id = products_has_valuesofcharactericstic.products_id "
+        +"AND valuesofcharactericstic.measurement_type_id = dishes_has_products.measurementtype_id "
+    +"JOIN meal_has_dishes ON meal_has_dishes.dishes_id = dishes_has_products.dishes_id "
+    +"JOIN meal ON meal.id = meal_has_dishes.meal_id "
+        +"WHERE valuesofcharactericstic.characteristics_id = @cI AND DATE(meal.createAt) = @d AND meal.user_id = @id "
+            +"UNION "
+    +"SELECT valuesofcharactericstic.value, meal_has_products.measurementtype_id, meal_has_products.quantity, "
+        +"CASE "
+       +" WHEN meal_has_products.measurementtype_id = 2 "
+       +" THEN(meal_has_products.quantity / 100) * (valuesofcharactericstic.value) "
+        +"ELSE(meal_has_products.quantity) * (valuesofcharactericstic.value) "
+    +"END AS proteins "
++"FROM valuesofcharactericstic "
+    +"JOIN products_has_valuesofcharactericstic ON valuesofcharactericstic.id = products_has_valuesofcharactericstic.valuesOfCharactericstic_id "
+    +"JOIN meal_has_products ON meal_has_products.products_id = products_has_valuesofcharactericstic.products_id "
+        +"AND valuesofcharactericstic.measurement_type_id = meal_has_products.measurementtype_id "
+    +"JOIN meal ON meal.id = meal_has_products.meal_id "
+       +" WHERE valuesofcharactericstic.characteristics_id = @cI AND DATE(meal.createAt) = @d AND meal.user_id = @id) res; ", this.getConnection());
+
+            command.Parameters.AddWithValue("@id", userId);
+            command.Parameters.AddWithValue("@d", date);
+            command.Parameters.AddWithValue("@cI", charId);
+
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+            if (table.Rows[0].ItemArray[0] == DBNull.Value) return 0;
+            else
+                return Convert.ToInt32(table.Rows[0].ItemArray[0]);
+        }
+
+        public bool addWaterPortion(string date, int userId, int typeOfPortion)
+        {
+            bool res_query;
+            MySqlCommand command = new MySqlCommand("INSERT INTO drinkingwater(createAt, users_id, typesOfWaterPortion_id) " +
+                "VALUES (@d, @i, @tOP);", this.getConnection());
+            command.Parameters.AddWithValue("@d", date);
+            command.Parameters.AddWithValue("@i", userId);
+            command.Parameters.AddWithValue("@tOP", typeOfPortion);
+
+            this.openConnection();
+            if (command.ExecuteNonQuery() == 1) res_query = true;
+            else res_query = false;
+
+            this.closeConnection();
+            return res_query;
+        }
+
+        public string getOftenEatingProduct(int userId)
+        {
+            string res_query;
+            DataTable table = new DataTable();
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+
+            MySqlCommand command = new MySqlCommand("SELECT name FROM "
++"(SELECT  name, MAX(count) AS max, username, user_id FROM "
++"( "
++"SELECT id AS meal_id, user_id, name, COUNT(name) AS count, username FROM "
++"(SELECT meal.id, products.name, users.name AS username, users.id AS user_id FROM products "
++"JOIN dishes_has_products ON dishes_has_products.products_id = products.id "
++"JOIN dishes ON dishes_has_products.dishes_id = dishes.id "
++"JOIN `measurement type` ON dishes_has_products.measurementtype_id = `measurement type`.id "
++"JOIN meal_has_dishes ON meal_has_dishes.dishes_id = dishes.id  "
++"JOIN meal ON meal_has_dishes.meal_id = meal.id "
++"JOIN users ON meal.user_id = users.id "
++    "UNION "
++"SELECT meal.id, products.name, users.name as username, users.id AS user_id FROM products "
++"JOIN meal_has_products ON meal_has_products.products_id = products.id "
++"JOIN meal ON meal_has_products.meal_id = meal.id "
++"JOIN users ON meal.user_id = users.id) as prod GROUP by name, username ORDER BY username, count DESC "
++") res GROUP BY username) res WHERE res.user_id = @id; ", this.getConnection());
+            command.Parameters.AddWithValue("@id", userId);
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+
+            if (table != null)
+            {
+                res_query = table.Rows[0].ItemArray[0].ToString();
+            }
+            else res_query = "такого продукта еще нет";
+            return res_query;
+        }
+
+        public DataTable getCharOfDish(string name)
+        {
+            DataTable table = new DataTable();
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+
+            MySqlCommand command = new MySqlCommand("SELECT SUM(calories) ,SUM(proteins), SUM(fats), SUM(carbohydrates) FROM" 
+               + "(SELECT *, "
++ " CASE WHEN res.measurement_type_id = 2 AND characteristics_id = 3 THEN(res.quantity / 100) * (res.value) "
+ +"   WHEN res.measurement_type_id = 1 AND characteristics_id = 3 THEN(res.quantity) * (res.value) "
+  +"  ELSE 0 "
++"END AS carbohydrates "
++"FROM "
++" (SELECT *, "
++" CASE "
+ +"   WHEN res.measurement_type_id = 2 AND characteristics_id = 2 THEN(res.quantity / 100) * (res.value) "
+ +"   WHEN res.measurement_type_id = 1 AND characteristics_id = 2 THEN(res.quantity) * (res.value) "
+ +"   ELSE 0 "
++"END AS fats "
++"FROM "
+ +"(SELECT *, "
+ +"CASE "
+  +"  WHEN res.measurement_type_id = 2 AND characteristics_id = 1 THEN(res.quantity / 100) * (res.value) "
+   +" WHEN res.measurement_type_id = 1 AND characteristics_id = 1 THEN(res.quantity) * (res.value) "
+   +" ELSE 0 "
++"END AS proteins "
++"FROM "
++"(SELECT *, "
++"CASE "
+  +"  WHEN res.measurement_type_id = 2 AND characteristics_id = 4 THEN(res.quantity / 100) * (res.value) "
+   +" WHEN res.measurement_type_id = 1 AND characteristics_id = 4 THEN(res.quantity) * (res.value) "
+   +" ELSE 0 "
++"END AS calories "
++"FROM "
++"(SELECT product, quantity, meas_type_prod, valuesOfCharactericstic_id, value, characteristics_id, measurement_type_id "
++"FROM valuesofcharactericstic JOIN "
+ +"(SELECT product, quantity, measurementtype_id AS meas_type_prod, valuesOfCharactericstic_id "
++" FROM products_has_valuesofcharactericstic JOIN "
+ +"(SELECT products_id AS product, quantity, measurementtype_id FROM dishes_has_products JOIN "
+ +"(SELECT id FROM dishes WHERE name = @name) "
+ +"res ON id = dishes_id) "
++" res ON product = products_id) "
++" res ON valuesOfCharactericstic_id = id) res) res) res) res) res; ", this.getConnection());
+            command.Parameters.AddWithValue("name", name);
+
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+
+            return table;
+        }
+
+        public DataTable getStuctureOfDish(string name)
+        {
+            DataTable table = new DataTable();
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+
+            MySqlCommand command = new MySqlCommand("SELECT name AS meas_type_name, product_name, quantity FROM `measurement type` JOIN "
+ +"(SELECT name AS product_name, quantity, measurementtype_id FROM products JOIN "
+ +"(SELECT products_id, quantity, measurementtype_id FROM dishes_has_products JOIN "
+ +"(SELECT id FROM dishes WHERE name = @n) "
+ +"res ON id = dishes_id) "
+ +"res ON id = products_id) "
+ +"res ON measurementtype_id = id; ", this.getConnection());
+            command.Parameters.AddWithValue("n", name);
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+
+            return table;
+        }
+
+        public DataTable getCharOfProduct(string name)
+        {
+            DataTable table = new DataTable();
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+
+            MySqlCommand command = new MySqlCommand("SELECT characteristics.name AS char_name, "
+   +"valuesofcharactericstic.value, `measurement type`.name AS mesurement_type_name "
+    +"FROM valuesofcharactericstic "
+   +" JOIN products_has_valuesofcharactericstic "
+       +" ON valuesofcharactericstic.id = products_has_valuesofcharactericstic.valuesOfCharactericstic_id "
+   +" JOIN products ON products.id = products_has_valuesofcharactericstic.products_id "
+   +" JOIN characteristics ON valuesofcharactericstic.characteristics_id = characteristics.id "
+    +"JOIN `measurement type` ON `measurement type`.id = valuesofcharactericstic.measurement_type_id WHERE products.name = @n; ", this.getConnection());
+            command.Parameters.AddWithValue("n", name);
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+
+            return table;
+        }
+
+        public DataTable getTypeOfProduct(string name)
+        {
+            DataTable table = new DataTable();
+
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+
+            MySqlCommand command = new MySqlCommand("SELECT typesofproduct.name FROM typesofproduct "
+    +"JOIN products ON products.typesOfProduct_id = typesofproduct.id "
+    +"WHERE products.name = @n; ", this.getConnection());
+            command.Parameters.AddWithValue("n", name);
+            adapter.SelectCommand = command;
+            adapter.Fill(table);
+
+            return table;
+        }
+
+        public bool updateName(string value, int userId)
+        {
+            bool res_query;
+            MySqlCommand command = new MySqlCommand("UPDATE users SET name = @v WHERE id = @i; ", this.getConnection());
+            command.Parameters.AddWithValue("v", value);
+            command.Parameters.AddWithValue("i", userId);
+            this.openConnection();
+            if (command.ExecuteNonQuery() == 1) res_query = true;
+            else res_query = false;
+            this.closeConnection();
+            return res_query;
+        }
+
+        public bool updateWeight(string value, int userId)
+        {
+            bool res_query;
+            MySqlCommand command = new MySqlCommand("UPDATE users SET weight = @v WHERE id = @i; ", this.getConnection());
+            command.Parameters.AddWithValue("v", value);
+            command.Parameters.AddWithValue("i", userId);
+            this.openConnection();
+            if (command.ExecuteNonQuery() == 1) res_query = true;
+            else res_query = false;
+            this.closeConnection();
+            return res_query;
+        }
+
+        public bool updateAge(string value, int userId)
+        {
+            bool res_query;
+            MySqlCommand command = new MySqlCommand("UPDATE users SET age = @v WHERE id = @i; ", this.getConnection());
+            command.Parameters.AddWithValue("v", value);
+            command.Parameters.AddWithValue("i", userId);
+            this.openConnection();
+            if (command.ExecuteNonQuery() == 1) res_query = true;
+            else res_query = false;
+            this.closeConnection();
+            return res_query;
+        }
+
+        public bool updateHeight(string value, int userId)
+        {
+            bool res_query;
+            MySqlCommand command = new MySqlCommand("UPDATE users SET height = @v WHERE id = @i; ", this.getConnection());
+            command.Parameters.AddWithValue("v", value);
+            command.Parameters.AddWithValue("i", userId);
+            this.openConnection();
+            if (command.ExecuteNonQuery() == 1) res_query = true;
+            else res_query = false;
+            this.closeConnection();
+            return res_query;
+        } 
+
+        public bool deleteLastMeal(int userId)
+        {
+            bool res_query;
+            MySqlCommand command = new MySqlCommand("DELETE FROM meal WHERE user_id = @i ORDER BY id DESC LIMIT 1;", this.getConnection());
+            command.Parameters.AddWithValue("i", userId);
+            this.openConnection();
+            if (command.ExecuteNonQuery() == 1) res_query = true;
+            else res_query = false;
+            this.closeConnection();
+            return res_query;
         }
     }
 }
