@@ -53,7 +53,7 @@ namespace FoodCalculator
             password_textBox.Text == "Введите пароль" ||
             weight.Text == "Вес" ||
             height.Text == "Рост" ||
-            age.Text == "Возраст" || (man_radioButton.Checked == false || woman.Checked == false)) MessageBox.Show("Заполните все поля");
+            age.Text == "Возраст" || (man_radioButton.Checked == false && woman.Checked == false)) MessageBox.Show("Заполните все поля");
             else
             {
                 if (isLoginExists()) return;

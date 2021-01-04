@@ -341,33 +341,20 @@ namespace FoodCalculator
 
             MySqlDataAdapter adapter = new MySqlDataAdapter();
 
-            MySqlCommand command = new MySqlCommand("SELECT SUM(proteins) FROM "
-    +"(SELECT valuesofcharactericstic.value, dishes_has_products.measurementtype_id, dishes_has_products.quantity, "
-        +"CASE "
-        +"WHEN dishes_has_products.measurementtype_id = 2 "
-        +"THEN(dishes_has_products.quantity / 100) * (valuesofcharactericstic.value) "
-        +"ELSE(dishes_has_products.quantity) * (valuesofcharactericstic.value) "
-    +"END AS proteins "
- +"FROM valuesofcharactericstic "
-    +"JOIN products_has_valuesofcharactericstic ON valuesofcharactericstic.id = products_has_valuesofcharactericstic.valuesOfCharactericstic_id "
-    +"JOIN dishes_has_products ON dishes_has_products.products_id = products_has_valuesofcharactericstic.products_id "
-        +"AND valuesofcharactericstic.measurement_type_id = dishes_has_products.measurementtype_id "
-    +"JOIN meal_has_dishes ON meal_has_dishes.dishes_id = dishes_has_products.dishes_id "
-    +"JOIN meal ON meal.id = meal_has_dishes.meal_id "
-        +"WHERE valuesofcharactericstic.characteristics_id = @cI AND DATE(meal.createAt) = @d AND meal.user_id = @id "
-            +"UNION "
-    +"SELECT valuesofcharactericstic.value, meal_has_products.measurementtype_id, meal_has_products.quantity, "
-        +"CASE "
-       +" WHEN meal_has_products.measurementtype_id = 2 "
-       +" THEN(meal_has_products.quantity / 100) * (valuesofcharactericstic.value) "
-        +"ELSE(meal_has_products.quantity) * (valuesofcharactericstic.value) "
-    +"END AS proteins "
-+"FROM valuesofcharactericstic "
-    +"JOIN products_has_valuesofcharactericstic ON valuesofcharactericstic.id = products_has_valuesofcharactericstic.valuesOfCharactericstic_id "
-    +"JOIN meal_has_products ON meal_has_products.products_id = products_has_valuesofcharactericstic.products_id "
-        +"AND valuesofcharactericstic.measurement_type_id = meal_has_products.measurementtype_id "
-    +"JOIN meal ON meal.id = meal_has_products.meal_id "
-       +" WHERE valuesofcharactericstic.characteristics_id = @cI AND DATE(meal.createAt) = @d AND meal.user_id = @id) res; ", this.getConnection());
+            MySqlCommand command = new MySqlCommand("SELECT SUM(res.result) FROM " +
+"(SELECT valuesofcharactericstic.value, dishes_has_products.quantity, dishes_has_products.measurementtype_id, " +
+"CASE " +
+    "WHEN dishes_has_products.measurementtype_id = 2 " +
+    "THEN(dishes_has_products.quantity / 100) * (valuesofcharactericstic.value) " +
+    "ELSE(dishes_has_products.quantity) * (valuesofcharactericstic.value) " +
+"END AS result " +
+ "FROM valuesofcharactericstic " +
+"JOIN products_has_valuesofcharactericstic " +
+"ON products_has_valuesofcharactericstic.valuesOfCharactericstic_id = valuesofcharactericstic.id " +
+"JOIN dishes_has_products ON products_has_valuesofcharactericstic.products_id = dishes_has_products.products_id " +
+"JOIN meal_has_dishes ON meal_has_dishes.dishes_id = dishes_has_products.dishes_id " +
+"JOIN meal ON meal.id = meal_has_dishes.meal_id WHERE meal.user_id = @id AND " +
+"DATE(meal.createAt) = @d AND valuesofcharactericstic.characteristics_id = @cI) res;", this.getConnection());
 
             command.Parameters.AddWithValue("@id", userId);
             command.Parameters.AddWithValue("@d", date);
