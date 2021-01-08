@@ -33,7 +33,7 @@ namespace FoodCalculator
         {
             bool res_query;
 
-            MySqlCommand command = new MySqlCommand("INSERT INTO `users` (`name`, `password`, `gender`, `weight`, `height`) VALUES (@name, @password, @age, @weigth, @height)", this.getConnection());
+            MySqlCommand command = new MySqlCommand("INSERT INTO `users` (`name`, `password`, `gender`, `weight`, `height`, `age`) VALUES (@name, @password, @age, @weigth, @height, @age)", this.getConnection());
             command.Parameters.AddWithValue("@name", name);
             command.Parameters.AddWithValue("@password", password);
             command.Parameters.AddWithValue("@gender", gender);     
