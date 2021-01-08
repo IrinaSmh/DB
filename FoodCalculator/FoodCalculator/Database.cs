@@ -341,7 +341,8 @@ namespace FoodCalculator
 
             MySqlDataAdapter adapter = new MySqlDataAdapter();
 
-            MySqlCommand command = new MySqlCommand("SELECT SUM(res.result) FROM " +
+            MySqlCommand command = new MySqlCommand("SELECT SUM(res.result) FROM" +
+                "(SELECT SUM(res.result) AS result FROM " +
 "(SELECT valuesofcharactericstic.value, dishes_has_products.quantity, dishes_has_products.measurementtype_id, " +
 "CASE " +
     "WHEN dishes_has_products.measurementtype_id = 2 " +
@@ -354,7 +355,21 @@ namespace FoodCalculator
 "JOIN dishes_has_products ON products_has_valuesofcharactericstic.products_id = dishes_has_products.products_id " +
 "JOIN meal_has_dishes ON meal_has_dishes.dishes_id = dishes_has_products.dishes_id " +
 "JOIN meal ON meal.id = meal_has_dishes.meal_id WHERE meal.user_id = @id AND " +
-"DATE(meal.createAt) = @d AND valuesofcharactericstic.characteristics_id = @cI) res;", this.getConnection());
+"DATE(meal.createAt) = @d AND valuesofcharactericstic.characteristics_id = @cI) res " +
+"UNION " +
+"SELECT SUM(res.result) AS result FROM" +
+"(SELECT valuesofcharactericstic.value, meal_has_products.quantity, meal_has_products.measurementtype_id, " +
+"CASE " +
+   "WHEN meal_has_products.measurementtype_id = 2 " +
+   "THEN(meal_has_products.quantity / 100) * (valuesofcharactericstic.value) " +
+   "ELSE(meal_has_products.quantity) * (valuesofcharactericstic.value) " +
+"END AS result " +
+"FROM valuesofcharactericstic " +
+"JOIN products_has_valuesofcharactericstic ON products_has_valuesofcharactericstic.valuesOfCharactericstic_id = valuesofcharactericstic.id " +
+"JOIN meal_has_products ON meal_has_products.products_id = products_has_valuesofcharactericstic.products_id " +
+"JOIN meal ON meal.id = meal_has_products.meal_id WHERE meal.user_id = @id AND DATE(meal.createAt) = @d " +
+"AND valuesofcharactericstic.characteristics_id = @cI) res) res; "
+, this.getConnection());
 
             command.Parameters.AddWithValue("@id", userId);
             command.Parameters.AddWithValue("@d", date);
@@ -426,44 +441,55 @@ namespace FoodCalculator
 
             MySqlDataAdapter adapter = new MySqlDataAdapter();
 
-            MySqlCommand command = new MySqlCommand("SELECT SUM(calories) ,SUM(proteins), SUM(fats), SUM(carbohydrates) FROM" 
-               + "(SELECT *, "
-+ " CASE WHEN res.measurement_type_id = 2 AND characteristics_id = 3 THEN(res.quantity / 100) * (res.value) "
- +"   WHEN res.measurement_type_id = 1 AND characteristics_id = 3 THEN(res.quantity) * (res.value) "
-  +"  ELSE 0 "
-+"END AS carbohydrates "
-+"FROM "
-+" (SELECT *, "
-+" CASE "
- +"   WHEN res.measurement_type_id = 2 AND characteristics_id = 2 THEN(res.quantity / 100) * (res.value) "
- +"   WHEN res.measurement_type_id = 1 AND characteristics_id = 2 THEN(res.quantity) * (res.value) "
- +"   ELSE 0 "
-+"END AS fats "
-+"FROM "
- +"(SELECT *, "
- +"CASE "
-  +"  WHEN res.measurement_type_id = 2 AND characteristics_id = 1 THEN(res.quantity / 100) * (res.value) "
-   +" WHEN res.measurement_type_id = 1 AND characteristics_id = 1 THEN(res.quantity) * (res.value) "
-   +" ELSE 0 "
-+"END AS proteins "
-+"FROM "
-+"(SELECT *, "
-+"CASE "
-  +"  WHEN res.measurement_type_id = 2 AND characteristics_id = 4 THEN(res.quantity / 100) * (res.value) "
-   +" WHEN res.measurement_type_id = 1 AND characteristics_id = 4 THEN(res.quantity) * (res.value) "
-   +" ELSE 0 "
-+"END AS calories "
-+"FROM "
-+"(SELECT product, quantity, meas_type_prod, valuesOfCharactericstic_id, value, characteristics_id, measurement_type_id "
-+"FROM valuesofcharactericstic JOIN "
- +"(SELECT product, quantity, measurementtype_id AS meas_type_prod, valuesOfCharactericstic_id "
-+" FROM products_has_valuesofcharactericstic JOIN "
- +"(SELECT products_id AS product, quantity, measurementtype_id FROM dishes_has_products JOIN "
- +"(SELECT id FROM dishes WHERE name = @name) "
- +"res ON id = dishes_id) "
-+" res ON product = products_id) "
-+" res ON valuesOfCharactericstic_id = id) res) res) res) res) res; ", this.getConnection());
-            command.Parameters.AddWithValue("name", name);
+            MySqlCommand command = new MySqlCommand("SELECT SUM(calories) ,SUM(proteins), SUM(fats), SUM(carbohydrates) FROM " +
+"(SELECT valuesofcharactericstic.value, dishes_has_products.quantity, dishes_has_products.measurementtype_id, valuesofcharactericstic.characteristics_id, " +
+"CASE " +
+        "WHEN dishes_has_products.measurementtype_id = 2 AND valuesofcharactericstic.characteristics_id = 4 " +
+        "THEN(dishes_has_products.quantity / 100) * (valuesofcharactericstic.value) " +
+        "WHEN dishes_has_products.measurementtype_id = 1 AND valuesofcharactericstic.characteristics_id = 4 " +
+        "THEN(dishes_has_products.quantity) * (valuesofcharactericstic.value) " +
+        "ELSE 0 " +
+
+    "END AS calories, " +
+    "CASE " +
+
+        "WHEN dishes_has_products.measurementtype_id = 2 AND valuesofcharactericstic.characteristics_id = 1 " +
+
+        "THEN(dishes_has_products.quantity / 100) * (valuesofcharactericstic.value) " +
+        "WHEN dishes_has_products.measurementtype_id = 1 AND valuesofcharactericstic.characteristics_id = 1 " +
+
+        "THEN(dishes_has_products.quantity) * (valuesofcharactericstic.value) " +
+        "ELSE 0 " +
+
+    "END AS proteins, " +
+    "CASE " +
+
+        "WHEN dishes_has_products.measurementtype_id = 2 AND valuesofcharactericstic.characteristics_id = 2 " +
+
+        "THEN(dishes_has_products.quantity / 100) * (valuesofcharactericstic.value) " +
+        "WHEN dishes_has_products.measurementtype_id = 1 AND valuesofcharactericstic.characteristics_id = 2 " +
+
+        "THEN(dishes_has_products.quantity) * (valuesofcharactericstic.value) " +
+        "ELSE 0 " +
+
+    "END AS fats, " +
+    "CASE " +
+
+        "WHEN dishes_has_products.measurementtype_id = 2 AND valuesofcharactericstic.characteristics_id = 3 " +
+
+        "THEN(dishes_has_products.quantity / 100) * (valuesofcharactericstic.value) " +
+        "WHEN dishes_has_products.measurementtype_id = 1 AND valuesofcharactericstic.characteristics_id = 3 " +
+
+        "THEN(dishes_has_products.quantity) * (valuesofcharactericstic.value) " +
+        "ELSE 0 " +
+
+    "END AS carbohydrates " +
+ "FROM valuesofcharactericstic " +
+"JOIN products_has_valuesofcharactericstic ON products_has_valuesofcharactericstic.valuesOfCharactericstic_id = valuesofcharactericstic.id " +
+"JOIN dishes_has_products ON products_has_valuesofcharactericstic.products_id = dishes_has_products.products_id " +
+"JOIN dishes ON dishes.id = dishes_has_products.dishes_id " +
+"WHERE dishes.name = @name) res;", this.getConnection());
+            command.Parameters.AddWithValue("@name", name);
 
             adapter.SelectCommand = command;
             adapter.Fill(table);
