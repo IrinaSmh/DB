@@ -309,13 +309,10 @@ namespace FoodCalculator
             this.openConnection();
 
             int mealId = Convert.ToInt32(command1.ExecuteScalar());
-            
-            Console.WriteLine(mealId.ToString());
 
             MySqlCommand command2 = new MySqlCommand("SELECT * FROM dishes WHERE name = @n;", this.getConnection());
             command2.Parameters.AddWithValue("n", nameDish);
             int dishId = (int)command2.ExecuteScalar();
-            Console.WriteLine(dishId.ToString());
 
             MySqlCommand command3 = new MySqlCommand("INSERT INTO meal_has_dishes(meal_id, dishes_id) " +
     "VALUES (@mI, @dI);", this.getConnection());
@@ -429,7 +426,13 @@ namespace FoodCalculator
 
             if (table != null)
             {
-                res_query = table.Rows[0].ItemArray[0].ToString();
+                try { res_query = table.Rows[0].ItemArray[0].ToString(); }
+                catch (System.IndexOutOfRangeException e)
+                {
+                    res_query = "такого продукта еще нет";
+                    return res_query;
+                }
+               
             }
             else res_query = "такого продукта еще нет";
             return res_query;

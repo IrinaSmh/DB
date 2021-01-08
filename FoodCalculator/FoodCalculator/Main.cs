@@ -27,7 +27,7 @@ namespace FoodCalculator
             waterPortion_comboBox.Items.Add("500 мл");
             waterPortion_comboBox.Items.Add("1000 мл");
 
-            oftenProd_label.Text = oftenProd_label.Text + getOftenProduct();
+            oftenProd_label.Text = "Наиболее часто потребляемый\n продукт: " + getOftenProduct();
         }
 
         private string generationNowDate()
@@ -149,7 +149,12 @@ namespace FoodCalculator
             tablePlanSettings();
             Database db = new Database();
             string date = generationNowDate();
-         
+
+            addlabelToPlanTable(db.getCharsUserMeal(Authorization.id, "калории", date).ToString(), 1, 2);
+            addlabelToPlanTable(db.getCharsUserMeal(Authorization.id, "белки", date).ToString(), 2, 2);
+            addlabelToPlanTable(db.getCharsUserMeal(Authorization.id, "жиры", date).ToString(), 3, 2);
+            addlabelToPlanTable(db.getCharsUserMeal(Authorization.id, "углеводы", date).ToString(), 4, 2);
+
             DataTable table = db.getMealPlan(Authorization.id);
 
             if (table != null && table.Rows.Count == 4)
@@ -159,25 +164,23 @@ namespace FoodCalculator
                     if (table.Rows[i].ItemArray[1].ToString() == "калории")
                     {
                         addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 1, 1);
-                        addlabelToPlanTable(db.getCharsUserMeal(1, "калории", date).ToString(), 1, 2);
                     }
+                        
+                    
 
                     if (table.Rows[i].ItemArray[1].ToString() == "белки")
                     {
                         addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 2, 1);
-                        addlabelToPlanTable(db.getCharsUserMeal(1, "белки", date).ToString(), 2, 2);
                     }
 
                     if (table.Rows[i].ItemArray[1].ToString() == "жиры")
                     {
-                        addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 3, 1);
-                        addlabelToPlanTable(db.getCharsUserMeal(1, "жиры", date).ToString(), 3, 2);
+                        addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 3, 1);               
                     }
 
                     if (table.Rows[i].ItemArray[1].ToString() == "углеводы")
                     {
-                        addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 4, 1);
-                        addlabelToPlanTable(db.getCharsUserMeal(1, "углеводы", date).ToString(), 4, 2);
+                        addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 4, 1);                      
                     }
 
 
@@ -198,6 +201,7 @@ namespace FoodCalculator
             showWaterNeed();
             showWaterRes();
             showMealPlan();
+            oftenProd_label.Text = "Наиболее часто потребляемый\n продукт: " + getOftenProduct();
         }
 
         private void addMealPlan_button_Click_1(object sender, EventArgs e)
@@ -215,7 +219,7 @@ namespace FoodCalculator
         {
             Database db = new Database();
             string date = generationNowDate();
-            db.addWaterPortion(date, 1, waterPortion_comboBox.SelectedIndex + 1);
+            db.addWaterPortion(date, Authorization.id, waterPortion_comboBox.SelectedIndex + 1);
             waterPortion_comboBox.Visible = false;
             showWaterRes();
         }
@@ -223,8 +227,7 @@ namespace FoodCalculator
         private string getOftenProduct()
         {
             Database db = new Database();
-            //Auth.id
-            return db.getOftenEatingProduct(1);
+            return db.getOftenEatingProduct(Authorization.id);
         }
 
         private void Edit_Click(object sender, EventArgs e)
@@ -236,11 +239,11 @@ namespace FoodCalculator
         private void delete_button_Click(object sender, EventArgs e)
         {
             Database db = new Database();
-            //Auth.id
-            if (db.deleteLastMeal(1))
+            if (db.deleteLastMeal(Authorization.id))
             {
                 showMeals();
                 showMealPlan();
+                oftenProd_label.Text = "Наиболее часто потребляемый\n продукт: " + getOftenProduct();
             }
             else MessageBox.Show("Не удалось удалить");
         }
