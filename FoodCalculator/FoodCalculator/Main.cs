@@ -152,34 +152,36 @@ namespace FoodCalculator
          
             DataTable table = db.getMealPlan(Authorization.id);
 
-
-            for(int i = 0; i < 4; i++)
+            if (table != null && table.Rows.Count == 4)
             {
-                if (table.Rows[i].ItemArray[1].ToString() == "калории")
+                for (int i = 0; i < 4; i++)
                 {
-                    addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 1, 1);
-                    addlabelToPlanTable(db.getCharsUserMeal(1, "калории", date).ToString(), 1, 2);
+                    if (table.Rows[i].ItemArray[1].ToString() == "калории")
+                    {
+                        addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 1, 1);
+                        addlabelToPlanTable(db.getCharsUserMeal(1, "калории", date).ToString(), 1, 2);
+                    }
+
+                    if (table.Rows[i].ItemArray[1].ToString() == "белки")
+                    {
+                        addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 2, 1);
+                        addlabelToPlanTable(db.getCharsUserMeal(1, "белки", date).ToString(), 2, 2);
+                    }
+
+                    if (table.Rows[i].ItemArray[1].ToString() == "жиры")
+                    {
+                        addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 3, 1);
+                        addlabelToPlanTable(db.getCharsUserMeal(1, "жиры", date).ToString(), 3, 2);
+                    }
+
+                    if (table.Rows[i].ItemArray[1].ToString() == "углеводы")
+                    {
+                        addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 4, 1);
+                        addlabelToPlanTable(db.getCharsUserMeal(1, "углеводы", date).ToString(), 4, 2);
+                    }
+
+
                 }
-
-                if (table.Rows[i].ItemArray[1].ToString() == "белки")
-                {
-                    addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 2, 1);
-                    addlabelToPlanTable(db.getCharsUserMeal(1, "белки", date).ToString(), 2, 2);
-                }
-
-                if (table.Rows[i].ItemArray[1].ToString() == "жиры")
-                {
-                    addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 3, 1);
-                    addlabelToPlanTable(db.getCharsUserMeal(1, "жиры", date).ToString(), 3, 2);
-                }
-
-                if (table.Rows[i].ItemArray[1].ToString() == "углеводы")
-                {
-                    addlabelToPlanTable(table.Rows[i].ItemArray[0].ToString(), 4, 1);
-                    addlabelToPlanTable(db.getCharsUserMeal(1, "углеводы", date).ToString(), 4, 2);
-                }
-
-
             }
                
         }
